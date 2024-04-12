@@ -1,13 +1,12 @@
-import GhostContentAPI, { PostOrPage, GhostAPI, GhostError, BrowseFunction, PostsOrPages  } from "@tryghost/content-api";
+import GhostContentAPI, { GhostAPI, GhostError } from "@tryghost/content-api";
 
 // Create API instance with site credentialE
 
 export const api: GhostAPI = new GhostContentAPI({
   url: process.env.GHOST_URL as string,
-  key: process.env.GHOST_KEY as string,
-  version: "v5.0"
+  key: process.env.GHOST_CONTENT_KEY as string,
+  version: "v5.0",
 });
-
 
 // Posts (Home page )
 
@@ -15,10 +14,10 @@ export async function getPosts() {
   return await api.posts
     .browse({
       include: ["tags", "authors"],
-      limit: 10
+      limit: 10,
     })
     .catch((error: GhostError) => {
-      throw error
+      throw error;
     });
 }
 
@@ -28,10 +27,10 @@ export async function getPaginationPosts(page: number) {
     .browse({
       include: ["tags", "authors"],
       limit: 10,
-      page: page
+      page: page,
     })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
@@ -39,106 +38,112 @@ export async function getPaginationPosts(page: number) {
 
 export async function getSinglePost(postSlug: string) {
   return await api.posts
-    .read({
-      slug: postSlug
-    }, { include: ["tags", "authors"] })
+    .read(
+      {
+        slug: postSlug,
+      },
+      { include: ["tags", "authors"] }
+    )
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
-
 
 // Pages (Page)
 export async function getAllPages() {
   return await api.pages
     .browse({
-      limit: 'all'
+      limit: "all",
     })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
 export async function getSinglePage(pageSlug: string) {
   return await api.pages
-    .read({
-      slug: pageSlug
-    }, { include: ["tags"] })
+    .read(
+      {
+        slug: pageSlug,
+      },
+      { include: ["tags"] }
+    )
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
 // Author (Author page)
 
 export async function getSingleAuthor(authorSlug: string) {
-  return await api.authors.read({
-    slug: authorSlug
-  }, { include: ["count.posts"] })
+  return await api.authors
+    .read(
+      {
+        slug: authorSlug,
+      },
+      { include: ["count.posts"] }
+    )
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
 export async function getSingleAuthorPosts(authorSlug: string) {
-  return await api.posts.browse({ filter: `authors:${authorSlug}` })
+  return await api.posts
+    .browse({ filter: `authors:${authorSlug}` })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
-};
+}
 
 export async function getAllAuthors() {
-
   return await api.authors
     .browse({
-      limit: "all"
+      limit: "all",
     })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
 // tag (Tag page)
 
 export async function getTagPosts(tagSlug: string) {
-
-  return await api.posts.browse({ filter: `tag:${tagSlug}`, include: 'count.posts' })
+  return await api.posts
+    .browse({ filter: `tag:${tagSlug}`, include: "count.posts" })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
-
 }
 
 export async function getSingleTag(tagSlug: string) {
-
-  return await api.tags.read({ slug: tagSlug })
-    .catch((error: Error) => {
-      console.log(error)
-    });
+  return await api.tags.read({ slug: tagSlug }).catch((error: Error) => {
+    console.log(error);
+  });
 }
 
 export async function getAllTags() {
-  return await api.tags.browse({
-    limit: "all"
-  })
+  return await api.tags
+    .browse({
+      limit: "all",
+    })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
-// Search 
+// Search
 export async function getSearchPosts() {
-  return await api.posts.browse({ include: ["tags", "authors"], limit: "all" })
+  return await api.posts
+    .browse({ include: ["tags", "authors"], limit: "all" })
     .catch((error: Error) => {
-      console.log(error)
+      console.log(error);
     });
 }
 
 // Navigation
 export async function getNavigation() {
-  return await api.settings.browse()
-    .catch((error: Error) => {
-      console.log(error)
-    });
-
+  return await api.settings.browse().catch((error: Error) => {
+    console.log(error);
+  });
 }
